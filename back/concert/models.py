@@ -5,5 +5,5 @@ class Concert(models.Model):
     date = models.DateField()
     description = models.TextField()
 
-    band = models.ForeignKey("band.Band", on_delete=models.CASCADE)
+    band_id = models.CharField(max_length=100)
     

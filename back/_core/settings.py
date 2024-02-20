@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import firebase_admin
+# from storages.backends.firebase import FirebaseStorage
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,10 +92,24 @@ WSGI_APPLICATION = '_core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CREDENTIALS_PATH = os.path.join(BASE_DIR, 'musichub-1378d-firebase-adminsdk-nrxhi-accd8608bc.json')
+
+CRED = firebase_admin.credentials.Certificate(CREDENTIALS_PATH)
+firebase_admin.initialize_app(CRED, {
+    'databaseURL': 'https://musichub-1378d-default-rtdb.firebaseio.com/',
+})
+print(firebase_admin._apps)
+
+FIREBASE_STORAGE_BUCKET_NAME = 'musichub-1378d.appspot.com'
+FIREBASE_STORAGE_CUSTOM_DOMAIN = F'{FIREBASE_STORAGE_BUCKET_NAME}.appspot.com'
+
+DEFAAULT_FILE_STORAGE = 'storages.backends.firebase.FirebaseStorage'
+FIREBASE_STORAGE_BUCKET = FIREBASE_STORAGE_BUCKET_NAME
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.dummy',
     }
 }
 
